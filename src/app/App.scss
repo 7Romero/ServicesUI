@@ -1,0 +1,16 @@
+
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.main {
+  margin: 70px 0 0 0;
+  flex: 1 0 auto;
+}
+
+.footer {
+  flex: 0 0 auto;
+}
