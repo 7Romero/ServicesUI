@@ -6,6 +6,7 @@ type UserDto = {
     registrationDate: string,
     description: string | undefined,
     descriptionTitle: string | undefined,
+    avatarLink: string | undefined,
 }
 
 export default UserDto;

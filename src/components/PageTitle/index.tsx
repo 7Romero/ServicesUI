@@ -14,6 +14,9 @@ export default function PageTitle(props: props) {
         <Container maxWidth="xl">
             <Typography
                 variant="h4"
+                sx={{
+                    fontSize: "24px"
+                }}
             >
                 {props.name}
             </Typography>

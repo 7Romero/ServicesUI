@@ -1,20 +1,21 @@
-import {Box, Card, Divider, InputAdornment} from "@mui/material";
-import Typography from "@mui/material/Typography";
-import {useNavigate} from "react-router-dom";
-import * as React from "react";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import {SubmitHandler, useForm} from "react-hook-form";
 import {useSnackbar} from "notistack";
+import {useNavigate} from "react-router-dom";
+import {SubmitHandler, useForm} from "react-hook-form";
 import ApplicationDto from "../../entities/Application/ApplicationDto";
 import ApplicationServices from "../../services/ApplicationServices";
+import {Box, Card, Divider, InputAdornment} from "@mui/material";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
 import TextEditor from "../TextEditor";
+import Button from "@mui/material/Button";
+import * as React from "react";
+import {useState} from "react";
 
 type Props = {
-    id: string
+    application: ApplicationDto,
 }
 
-export default function Application(props: Props) {
+export default function EditApplication(props: Props) {
     const {enqueueSnackbar} = useSnackbar();
     const navigate = useNavigate();
 
@@ -35,10 +36,10 @@ export default function Application(props: Props) {
             return;
         }
 
-        data.orderId = props.id;
         let response;
+        data.orderId = props.application.orderId;
 
-        response = await ApplicationServices.CreateApplication(data);
+        response = await ApplicationServices.UpdateApplication(props.application.id, data);
 
         if (!response.Status) {
             enqueueSnackbar(response.Message, {
@@ -50,7 +51,7 @@ export default function Application(props: Props) {
 
         navigate(`/FindWork`);
 
-        enqueueSnackbar("Application has been submitted", {
+        enqueueSnackbar("Application has been edited", {
                 variant: "success"
             }
         );
@@ -67,7 +68,7 @@ export default function Application(props: Props) {
             }}
         >
             <Typography variant="h5">
-                Submit an application now
+                Edit your application now
             </Typography>
 
             <Divider
@@ -86,6 +87,7 @@ export default function Application(props: Props) {
                     InputProps={{
                         endAdornment: <InputAdornment position="end">USD</InputAdornment>
                     }}
+                    defaultValue={props.application.suggestedPrice}
                     error={Boolean(errors.suggestedPrice?.message)}
                     helperText={errors.suggestedPrice?.message}
                     {...register("suggestedPrice", {
@@ -108,6 +110,7 @@ export default function Application(props: Props) {
                     InputProps={{
                         endAdornment: <InputAdornment position="end">days</InputAdornment>
                     }}
+                    defaultValue={props.application.suggestedTime}
                     error={Boolean(errors.suggestedTime?.message)}
                     helperText={errors.suggestedTime?.message}
                     {...register("suggestedTime", {
@@ -130,7 +133,7 @@ export default function Application(props: Props) {
                     <TextEditor
                         setValue={setValue}
                         name="description"
-                        initialValue={""}
+                        initialValue={props.application.description}
                     />
                 </Box>
             </Box>
@@ -147,7 +150,7 @@ export default function Application(props: Props) {
                     },
                 }}
             >
-                Send
+                Edit
             </Button>
         </Card>
     );

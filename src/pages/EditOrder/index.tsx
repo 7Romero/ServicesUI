@@ -17,6 +17,7 @@ import UserServices from "../../services/UserServices";
 import OrderServices from "../../services/OrderServices";
 import {useNavigate, useParams} from "react-router-dom";
 import useAuth from "../../shared/hooks/useAuth";
+import TextEditor from "../../components/TextEditor";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -150,7 +151,7 @@ export default function EditOrder() {
                             p: "20px",
                         }}
                     >
-                        <Typography variant="h5">
+                        <Typography variant="h6">
                             Order name
                         </Typography>
                         <TextField
@@ -175,33 +176,21 @@ export default function EditOrder() {
                             })
                             }
                         />
-                        <Typography variant="h5">
+                        <Typography variant="h6">
                             Description
                         </Typography>
-                        <TextField
-                            margin="normal"
-                            required
-                            fullWidth
-                            id="description"
-                            multiline
-                            rows={6}
-                            defaultValue={orderState.description}
-                            error={Boolean(errors.description?.message)}
-                            helperText={errors.description?.message}
-                            {...register("description", {
-                                minLength: {
-                                    value: 5,
-                                    message: "Description name must contain at lest 5 characters",
-                                },
-                                maxLength: {
-                                    value: 5000,
-                                    message: "Description name must contain at most 5000 characters",
-                                },
-                                required: "Description name is required",
-                            })
-                            }
-                        />
-                        <Typography variant="h5">
+                        <Box
+                            sx={{
+                                m: "20px 0"
+                            }}
+                        >
+                            <TextEditor
+                                setValue={setValue}
+                                name="description"
+                                initialValue={orderState.description}
+                            />
+                        </Box>
+                        <Typography variant="h6">
                             Budget
                         </Typography>
                         <TextField
@@ -232,7 +221,7 @@ export default function EditOrder() {
                             <Box
                                 sx={{mr: 5}}
                             >
-                                <Typography variant="h5">
+                                <Typography variant="h6">
                                     Section
                                 </Typography>
                                 <TextField
@@ -259,7 +248,7 @@ export default function EditOrder() {
                                 </TextField>
                             </Box>
                             <Box>
-                                <Typography variant="h5">
+                                <Typography variant="h6">
                                     Category
                                 </Typography>
                                 <TextField

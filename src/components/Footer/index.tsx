@@ -2,10 +2,11 @@ import * as React from "react";
 import {Box, Button, Container, Link, Typography} from "@mui/material";
 import { Link as LinkTo } from "react-router-dom";
 
-const pages = ["Home", "Find Work", "Freelancers"];
+const pages = ["Find Work", "My Jobs", "My Orders"];
 
 const pageStyle = {
     button: {
+        mr: 1,
         fontFamily: "monospace",
         fontSize: "16px",
         fontWeight: "800",
@@ -17,6 +18,7 @@ const pageStyle = {
         },
     },
     logoName: {
+        mr: 2,
         display: "flex",
         fontFamily: "monospace",
         fontSize: "24px",

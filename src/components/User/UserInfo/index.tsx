@@ -5,10 +5,13 @@ import avatar from "./avatar.png"
 import {useEffect, useState} from "react";
 import timeCalc from "../../../shared/helper/TimeCalc";
 import UserDto from "../../../entities/User/UserDto";
+import Avatar from "@mui/material/Avatar";
 
 type Props = {
     user: UserDto,
 }
+
+const path = "https://localhost:7200/Resources/AvatarImg/";
 
 export default function UserInfo(props: Props) {
 
@@ -33,20 +36,19 @@ export default function UserInfo(props: Props) {
         >
             <Box
                 sx={{
-                    maxHeight: "120px",
-                    maxWidth: "120px",
+                    width: "100px",
+                    height: "100px",
                     mr: 3,
                 }}
             >
-                <CardMedia
-                    component="img"
-                    alt="Avatar"
-                    image={avatar}
+                <Avatar
                     sx={{
                         width: "100%",
-                        height: "auto",
-                        borderRadius: "5px",
+                        height: "100%",
+                        objectFit: "cover",
                     }}
+                    alt=""
+                    src={path + props.user.avatarLink}
                 />
             </Box>
             <Box>

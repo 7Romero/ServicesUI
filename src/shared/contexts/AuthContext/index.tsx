@@ -1,6 +1,7 @@
 import { createContext } from "react";
 
 export type UserContextType = {
+    id: string | undefined,
     username: string | undefined,
     roles: string[] | undefined,
 }

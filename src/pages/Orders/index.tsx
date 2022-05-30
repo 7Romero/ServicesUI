@@ -10,8 +10,11 @@ import UserInfo from "../../components/User/UserInfo";
 import OrderDto from "../../entities/Order/OrderDto";
 import useAuth from "../../shared/hooks/useAuth";
 import Application from "../../components/Orders/Application";
-import user from "../../shared/api/endpoints/user";
 import ApplicationList from "../../components/Orders/ApplicationList";
+import parse from 'html-react-parser';
+import ApplicationServices from "../../services/ApplicationServices";
+import ApplicationDto from "../../entities/Application/ApplicationDto";
+import EditApplication from "../../components/Orders/EditApplication";
 
 export default function Orders() {
     const {enqueueSnackbar} = useSnackbar();
@@ -20,6 +23,7 @@ export default function Orders() {
     const {id} = useParams();
 
     const [orderState, setOrderState] = useState<OrderDto>();
+    const [application, setApplication] = useState<ApplicationDto>();
 
     const handlerDeleteButton = async () => {
         if (typeof id === "undefined") return;
@@ -46,8 +50,19 @@ export default function Orders() {
         });
     }
 
-    const fetchData = useCallback(async () => {
+    const fetchApplicationData = async () => {
+        if (typeof id === "undefined") return;
 
+        const response = await ApplicationServices.GetApplicationForOrder(id);
+
+        if (!response.Status) {
+            return;
+        }
+
+        setApplication(response.Data);
+    };
+
+    const fetchOrderData = async () => {
         if (typeof id === "undefined") return;
 
         const response = await OrderServices.GetOrder(id);
@@ -66,12 +81,15 @@ export default function Orders() {
         }
 
         setOrderState(response.Data);
+    };
 
+    const fetchData = useCallback(async () => {
+        await fetchOrderData()
+        await fetchApplicationData();
     }, [id]);
 
     useEffect(() => {
-        fetchData()
-
+        fetchData();
     }, [fetchData])
 
     return (
@@ -117,68 +135,93 @@ export default function Orders() {
                                     m: "20px 0",
                                 }}
                             >
-                                {orderState.description}
+                                {parse(orderState.description)}
                             </Typography>
-
-                            {auth.user &&
-                                (auth.user.roles?.find((role) => role === "Administrator") ||
-                                    auth.user.username === orderState.user.username)
-                                && (
-                                    <Box
-                                        sx={{
-                                            display: "flex",
-                                            flexDirection: "column",
-                                        }}
-                                    >
-                                        <Box>
-                                            <Button
-                                                component={Link}
-                                                to={`/EditOrder/${id}`}
-                                                variant="contained"
-                                                color="success"
-                                            >
-                                                Edit order
-                                            </Button>
-                                        </Box>
-                                        <Box
-                                            sx={{
-                                                mt: 2,
-                                            }}
-                                        >
-                                            <Button
-                                                variant="contained"
-                                                color="error"
-                                                onClick={handlerDeleteButton}
-                                            >
-                                                Delete order
-                                            </Button>
-                                        </Box>
-                                    </Box>
-                                )}
                         </Card>
 
-                        {auth.user && (
-                            <>
-                                {auth.user.username === orderState.user.username ? (
-                                    <>
-                                        <Box
+                        {auth.user &&
+                            (auth.user.roles?.find((role) => role === "Administrator") ||
+                                auth.user.username === orderState.user.username)
+                            && (
+                                <Box
+                                    sx={{
+                                        mt: 2,
+                                        display: "flex",
+                                        justifyContent: {xs: "space-around", md: "flex-start"},
+                                    }}
+                                >
+                                    <Box>
+                                        <Button
+                                            component={Link}
+                                            to={`/EditOrder/${id}`}
+                                            variant="contained"
+                                            color="success"
                                             sx={{
-                                                mt: 2,
+                                                mr: 2,
                                             }}
                                         >
-                                            <ApplicationList id={orderState.id}/>
-                                        </Box>
-                                    </>
-                                ) : (
-                                    <Box
-                                        sx={{
-                                            mt: 2,
-                                        }}
-                                    >
-                                        <Application id={orderState.id}/>
+                                            Edit order
+                                        </Button>
                                     </Box>
-                                )
-                                }
+                                    <Box
+                                    >
+                                        <Button
+                                            variant="contained"
+                                            color="error"
+                                            onClick={handlerDeleteButton}
+                                        >
+                                            Delete order
+                                        </Button>
+                                    </Box>
+                                </Box>
+                            )}
+
+                        {orderState.freelancer ? (
+                            <Card
+                                sx={{
+                                    mt: 2,
+                                    p: "20px",
+                                }}
+                            >
+                                <Typography
+                                    variant="h5"
+                                    sx={{
+                                        mb: 2,
+                                    }}
+                                >
+                                    This order is handled by:
+                                </Typography>
+                                <UserInfo user={orderState.freelancer}/>
+                            </Card>
+                        ) : (
+                            <>
+                                {auth.user && (
+                                    <>
+                                        {auth.user.username === orderState.user.username ? (
+                                            <>
+                                                <Box
+                                                    sx={{
+                                                        mt: 2,
+                                                    }}
+                                                >
+                                                    <ApplicationList id={orderState.id}/>
+                                                </Box>
+                                            </>
+                                        ) : (
+                                            <Box
+                                                sx={{
+                                                    mt: 2,
+                                                }}
+                                            >
+                                                {application ? (
+                                                    <EditApplication application={application}/>
+                                                ) : (
+                                                    <Application id={orderState.id}/>
+                                                )}
+                                            </Box>
+                                        )}
+                                    </>
+                                )}
                             </>
                         )}
                     </Container>

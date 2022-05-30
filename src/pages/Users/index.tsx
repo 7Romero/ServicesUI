@@ -8,6 +8,7 @@ import {useSnackbar} from "notistack";
 import UserDto from "../../entities/User/UserDto";
 import useAuth from "../../shared/hooks/useAuth";
 import BigButton from "../../components/BigButton";
+import parse from "html-react-parser";
 
 export default function Users() {
     const {enqueueSnackbar} = useSnackbar();
@@ -114,14 +115,12 @@ export default function Users() {
                         >
                             {userState.descriptionTitle}
                         </Typography>
-                        <Typography
-                            variant="subtitle1"
+                        <Box
                             sx={{
-                                display: "inline",
+                                wordWrap: "break-word",
                             }}
-                        >
-                            {userState.description}
-                        </Typography>
+                            dangerouslySetInnerHTML={{__html: userState.description}}
+                        />
                     </Card>
                 )}
             </Container>

@@ -11,7 +11,6 @@ import PrivateRoute from "../components/PrivateRoute"
 import NotFound from "../../../pages/NotFound";
 import Login from "../../../pages/Login"
 import Registration from "../../../pages/Registration"
-import Home from "../../../pages/Home";
 import FindWork from "../../../pages/FindWork";
 import CreateOrder from "../../../pages/CreateOrder";
 import Users from "../../../pages/Users";
@@ -19,20 +18,50 @@ import Orders from "../../../pages/Orders";
 import PaginateProvider from "../../providers/PaginateProvider";
 import EditProfile from "../../../pages/EditProfile";
 import EditOrder from "../../../pages/EditOrder";
+import Payment from "../../../pages/Payment";
+import MyJobs from "../../../pages/MyJobs";
+import MyOrders from "../../../pages/MyOrders";
 
 function AppRoutes() {
     const auth = useAuth();
 
     return auth.isLoaded ? (
         <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/Home" element={<Home />} />
+            <Route path="/payment" element={<Payment />} />
+            <Route
+                path="/"
+                element={
+                    <PaginateProvider>
+                        <FindWork />
+                    </PaginateProvider>
+                }
+            />
             <Route
                 path="/FindWork"
                 element={
                     <PaginateProvider>
                         <FindWork />
                     </PaginateProvider>
+                }
+            />
+            <Route
+                path="/MyJobs"
+                element={
+                    <PrivateRoute>
+                        <PaginateProvider>
+                            <MyJobs />
+                        </PaginateProvider>
+                    </PrivateRoute>
+                }
+            />
+            <Route
+                path="/MyOrders"
+                element={
+                    <PrivateRoute>
+                        <PaginateProvider>
+                            <MyOrders />
+                        </PaginateProvider>
+                    </PrivateRoute>
                 }
             />
             <Route

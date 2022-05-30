@@ -13,7 +13,7 @@ import {useCallback, useEffect, useState} from "react";
 import {useSnackbar} from "notistack";
 import SectionDto from "../../../entities/Section/SectionDto";
 import usePaginate from "../../../shared/hooks/UsePaginate";
-import {FilterType} from "../../../shared/contexts/PaginateContext";
+import {FilterType, RequestFiltersType} from "../../../shared/contexts/PaginateContext";
 
 const pageStyle = {
 
@@ -29,13 +29,18 @@ function NavBar() {
     const {enqueueSnackbar} = useSnackbar();
 
     const handlerClickCategory = (id: string) =>{
-        const requestFilters: FilterType = {
+        const requestFilters: RequestFiltersType = {
             logicalOperator: 0,
             filters: [
                 {
                     comparisonOperators: 2,
                     path: "CategoryId",
                     value: id
+                },
+                {
+                    comparisonOperators: 2,
+                    path: "FreelancerId",
+                    value: ""
                 }
             ]
         }

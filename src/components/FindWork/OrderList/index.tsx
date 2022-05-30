@@ -52,6 +52,16 @@ type propsType = {
 function OrderList(props: propsType ) {
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
+    const showDescription = (str: string):string => {
+        let newStr =str.replaceAll(/<[^>]+>/g, '')
+
+        if(newStr.length > 270){
+            newStr = newStr.substring(0, 270) + "...";
+        }
+
+        return newStr;
+    }
+
     return (
         <>
             <Card sx={pageStyle.cardStyle}>
@@ -81,7 +91,7 @@ function OrderList(props: propsType ) {
                                     variant="subtitle1"
                                     color="#000"
                                 >
-                                    {props.data.description}
+                                    {showDescription(props.data.description)}
                                 </Typography>
                             </Box>
                             <Box
@@ -111,13 +121,6 @@ function OrderList(props: propsType ) {
                                 sx={pageStyle.category}
                             >
                                 {props.data.categoryName}
-                            </Typography>
-                            <Typography
-                                variant="body2"
-                                color="text.secondary"
-                                sx={pageStyle.data}
-                            >
-                                {/*2 часа назад*/}
                             </Typography>
                         </Box>
                     </CardContent>

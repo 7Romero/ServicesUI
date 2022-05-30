@@ -2,7 +2,7 @@ import * as React from "react";
 import {
     Box,
     Card,
-    Container, Divider, IconButton, InputAdornment, Pagination, Stack,
+    Container, Divider, IconButton, Pagination, Stack,
 } from "@mui/material";
 import OrderList from "../../components/FindWork/OrderList";
 import NavBar from "../../components/FindWork/NavBar";
@@ -15,7 +15,9 @@ import PageTitle from "../../components/PageTitle";
 import usePaginate from "../../shared/hooks/UsePaginate";
 import TextField from "@mui/material/TextField";
 import SearchIcon from '@mui/icons-material/Search';
-import {FilterType} from "../../shared/contexts/PaginateContext";
+import {RequestFiltersType} from "../../shared/contexts/PaginateContext";
+import Typography from "@mui/material/Typography";
+import Clear from "@mui/icons-material/Clear";
 
 const pageStyle = {
     wrapper: {
@@ -53,9 +55,24 @@ function FindWork() {
 
     const [searchValue, setSearchValue] = useState("");
 
+    const handlerClearFilters = () => {
+        const requestFilters: RequestFiltersType = {
+            logicalOperator: 0,
+            filters: [
+                {
+                    comparisonOperators: 2,
+                    path: "FreelancerId",
+                    value: ""
+                }
+            ]
+        }
+
+        paginate.setRequestFilters(requestFilters);
+    }
+
     const handlerSearch = () => {
-        const requestFilters: FilterType = {
-            logicalOperator: 1,
+        const requestFilters: RequestFiltersType = {
+            logicalOperator: 0,
             filters: [
                 {
                     comparisonOperators: 1,
@@ -63,9 +80,9 @@ function FindWork() {
                     value: searchValue
                 },
                 {
-                    comparisonOperators: 1,
-                    path: "Description",
-                    value: searchValue
+                    comparisonOperators: 2,
+                    path: "FreelancerId",
+                    value: ""
                 }
             ]
         }
@@ -168,6 +185,7 @@ function FindWork() {
                                 }}
                             >
                                 <IconButton
+                                    title={"Search"}
                                     size="large"
                                     aria-label="search"
                                     color="inherit"
@@ -175,17 +193,40 @@ function FindWork() {
                                 >
                                     <SearchIcon />
                                 </IconButton>
+                                <IconButton
+                                    title={"Delete filters"}
+                                    size="large"
+                                    aria-label="search"
+                                    color="inherit"
+                                    onClick={handlerClearFilters}
+                                >
+                                    <Clear />
+                                </IconButton>
                             </Box>
                         </Card>
 
-                        {orders &&
-                            orders.map((order) => {
+                        {orders && orders.length > 0 ? (
+                            <>
+                                {
+                                    orders.map((order) => {
 
-                                return (
-                                    <OrderList key={order.id} data={order}/>
-                                );
-                            })
-                        }
+                                        return (
+                                            <OrderList key={order.id} data={order}/>
+                                        );
+                                    })
+                                }
+                            </>
+                        ): (
+                            <Card
+                                sx={{
+                                    p: "30px",
+                                }}
+                            >
+                                <Typography variant="subtitle1">
+                                    No orders
+                                </Typography>
+                            </Card>
+                        )}
 
                         <Box
                             component={Card}

@@ -8,14 +8,14 @@ import {useSnackbar} from "notistack";
 import PageTitle from "../../components/PageTitle";
 import {Card, InputAdornment, MenuItem} from "@mui/material";
 import Typography from "@mui/material/Typography";
-import OrderDto from "../../entities/Order/OrderDto";
-import {useCallback, useEffect, useState} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import SectionServices from "../../services/SectionServices";
 import SectionDto from "../../entities/Section/SectionDto";
 import OrderCreateDto from "../../entities/Order/OrderCreateDto";
-import UserServices from "../../services/UserServices";
 import OrderServices from "../../services/OrderServices";
 import {useNavigate} from "react-router-dom";
+import {Editor} from "@tinymce/tinymce-react";
+import TextEditor from "../../components/TextEditor";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -27,6 +27,7 @@ const MenuProps = {
         }
     }
 };
+
 export default function CreateOrder() {
     const [sections, setSections] = useState<SectionDto[]>([]);
     const [selectSection, setSelectSection] = useState<number>(0);
@@ -45,6 +46,15 @@ export default function CreateOrder() {
     } = useForm<OrderCreateDto>();
 
     const onSubmit: SubmitHandler<OrderCreateDto> = async data => {
+
+        if(typeof data.description === "undefined" || data.description === "") {
+            enqueueSnackbar("Description is required", {
+                    variant: "error"
+                }
+            );
+            return;
+        }
+
         let response = await OrderServices.CreateOrder(data);
 
         if (!response.Status) {
@@ -112,7 +122,7 @@ export default function CreateOrder() {
                         p: "20px",
                 }}
                 >
-                    <Typography variant="h5">
+                    <Typography variant="h6">
                         Order name
                     </Typography>
                     <TextField
@@ -136,32 +146,23 @@ export default function CreateOrder() {
                         })
                         }
                     />
-                    <Typography variant="h5">
+                    <Typography variant="h6">
                         Description
                     </Typography>
-                    <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="description"
-                        multiline
-                        rows={6}
-                        error={Boolean(errors.description?.message)}
-                        helperText={errors.description?.message}
-                        {...register("description", {
-                            minLength: {
-                                value: 5,
-                                message: "Description name must contain at lest 5 characters",
-                            },
-                            maxLength: {
-                                value: 5000,
-                                message: "Description name must contain at most 5000 characters",
-                            },
-                            required: "Description name is required",
-                        })
-                        }
-                    />
-                    <Typography variant="h5">
+
+                    <Box
+                        sx={{
+                            m: "20px 0"
+                        }}
+                    >
+                        <TextEditor
+                            setValue={setValue}
+                            name="description"
+                            initialValue={""}
+                        />
+                    </Box>
+
+                    <Typography variant="h6">
                         Budget
                     </Typography>
                     <TextField
@@ -191,7 +192,7 @@ export default function CreateOrder() {
                             <Box
                                 sx={{mr: 5}}
                             >
-                                <Typography variant="h5">
+                                <Typography variant="h6">
                                     Section
                                 </Typography>
                                 <TextField
@@ -218,7 +219,7 @@ export default function CreateOrder() {
                                 </TextField>
                             </Box>
                             <Box>
-                                <Typography variant="h5">
+                                <Typography variant="h6">
                                     Category
                                 </Typography>
                                 <TextField

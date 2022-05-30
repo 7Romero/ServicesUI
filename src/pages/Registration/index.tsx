@@ -11,7 +11,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 
-import { Link as LinkTo } from "react-router-dom";
+import {Link as LinkTo} from "react-router-dom";
 import {useState} from "react";
 import useAuth from "../../shared/hooks/useAuth";
 import {useSnackbar} from "notistack";
@@ -29,6 +29,7 @@ export default function Registration() {
     const {
         register,
         handleSubmit,
+        setError,
         watch, formState: {errors}
     } = useForm<UserRegistrationDto>();
 
@@ -37,7 +38,7 @@ export default function Registration() {
 
         let responseReg = await UserServices.RegistrationUser(data);
 
-        if(!responseReg.Status) {
+        if (!responseReg.Status) {
             enqueueSnackbar(responseReg.Message, {
                     variant: responseReg.Variant
                 }
@@ -69,7 +70,7 @@ export default function Registration() {
     return (
         <>
             <Container component="main" maxWidth="xs">
-                <CssBaseline />
+                <CssBaseline/>
                 <Box
                     sx={{
                         display: 'flex',
@@ -82,7 +83,7 @@ export default function Registration() {
                     <Typography component="h1" variant="h5">
                         Sign up
                     </Typography>
-                    <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 3 }}>
+                    <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{mt: 3}}>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <TextField
@@ -188,6 +189,20 @@ export default function Registration() {
                                             value: 20,
                                             message: "Password must contain at most 20 characters",
                                         },
+                                        validate: (v) => {
+                                            if(!/(?=.*[0-9])/.test(v)) {
+                                                return "Passwords must contain at least 1 number"
+                                            }
+                                            else if(!/(?=.*[!@#$%^&*])/.test(v)) {
+                                                return "Passwords must contain at least 1 special symbol"
+                                            }
+                                            else if(!/(?=.*[A-Z])/.test(v)) {
+                                                return "Passwords must contain at least 1 capital letter"
+                                            }
+                                            else if(!/(?=.*[a-z])/.test(v)) {
+                                                return "Passwords must contain at least 1 letter"
+                                            }
+                                        },
                                         required: "Password is required",
                                     })
                                     }
@@ -195,7 +210,7 @@ export default function Registration() {
                             </Grid>
                             <Grid item xs={12}>
                                 <FormControlLabel
-                                    control={<Checkbox aria-checked color="primary" />}
+                                    control={<Checkbox aria-checked color="primary"/>}
                                     label="I want to receive marketing promotions and updates via email."
                                     {...register("Notification")}
                                 />
@@ -213,7 +228,7 @@ export default function Registration() {
                                 '&:hover': {
                                     background: "#004a42",
                                 },
-                        }}
+                            }}
                         >
                             Sign Up
                         </Button>

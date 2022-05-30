@@ -23,7 +23,7 @@ const pageStyle = {
 
 type props = {
     name: string,
-    link: string
+    link: string,
 }
 
 function BigButton(props: props) {

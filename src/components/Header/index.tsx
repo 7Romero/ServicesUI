@@ -12,13 +12,14 @@ import {useState} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../../shared/hooks/useAuth";
 
-const pages = ["Find Work", "Freelancers"];
+const pages = ["Find Work", "My Jobs", "My Orders"];
 const guestsButtons = ["Login", "Registration"];
 
 export default function Header() {
     const pageStyle = {
         button: {
             my: 2,
+            mr: 1,
             fontFamily: "monospace",
             fontSize: "16px",
             fontWeight: "800",
@@ -255,6 +256,5 @@ export default function Header() {
                 </Toolbar>
             </Container>
         </AppBar>
-
     )
 }

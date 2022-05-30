@@ -1,18 +1,30 @@
-import React, {useCallback, useEffect, useMemo, useState} from "react";
-import {UserContextType} from "../../contexts/AuthContext";
-import {FilterType, PaginateContext} from "../../contexts/PaginateContext";
-import Cookies from "js-cookie";
+import React, {useMemo, useState} from "react";
+import {PaginateContext, RequestFiltersType} from "../../contexts/PaginateContext";
+import useAuth from "../../hooks/useAuth";
 
 type Props = {
     children: JSX.Element;
 }
 
 function PaginateProvider(props: Props) {
+    const auth = useAuth();
+
     const [pageIndex, setPageIndex] = useState<number>(0);
     const [pageSize, setPageSize] = useState<number>(3);
     const [columnNameForSorting, setColumnNameForSorting] = useState<string>("id");
     const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
-    const [requestFilters, setRequestFilters] = useState<FilterType | undefined>();
+    const [requestFilters, setRequestFilters] = useState<RequestFiltersType>(
+        {
+            logicalOperator: 0,
+            filters: [
+                {
+                    comparisonOperators: 2,
+                    path: "FreelancerId",
+                    value: "",
+                }
+            ]
+        }
+    );
 
     const contextValue = useMemo(
         () => ({
