@@ -29,6 +29,7 @@ const MenuProps = {
         }
     }
 };
+
 export default function EditOrder() {
     const [sections, setSections] = useState<SectionDto[]>([]);
     const [orderState, setOrderState] = useState<OrderDto>();
@@ -151,7 +152,7 @@ export default function EditOrder() {
                             p: "20px",
                         }}
                     >
-                        <Typography variant="h6">
+                        <Typography variant="h5">
                             Order name
                         </Typography>
                         <TextField
@@ -169,14 +170,14 @@ export default function EditOrder() {
                                     message: "Order name must contain at lest 5 characters",
                                 },
                                 maxLength: {
-                                    value: 20,
-                                    message: "Order name must contain at most 20 characters",
+                                    value: 50,
+                                    message: "Order name must contain at most 50 characters",
                                 },
                                 required: "Order name is required",
                             })
                             }
                         />
-                        <Typography variant="h6">
+                        <Typography variant="h5">
                             Description
                         </Typography>
                         <Box
@@ -190,7 +191,7 @@ export default function EditOrder() {
                                 initialValue={orderState.description}
                             />
                         </Box>
-                        <Typography variant="h6">
+                        <Typography variant="h5">
                             Budget
                         </Typography>
                         <TextField
@@ -208,7 +209,7 @@ export default function EditOrder() {
                                     value: /^\d/i,
                                     message: "Please enter a number"
                                 },
-                                required: "Budget name is required",
+                                required: "Budget is required",
                             })
                             }
                         />
@@ -221,7 +222,7 @@ export default function EditOrder() {
                             <Box
                                 sx={{mr: 5}}
                             >
-                                <Typography variant="h6">
+                                <Typography variant="h5">
                                     Section
                                 </Typography>
                                 <TextField
@@ -248,7 +249,7 @@ export default function EditOrder() {
                                 </TextField>
                             </Box>
                             <Box>
-                                <Typography variant="h6">
+                                <Typography variant="h5">
                                     Category
                                 </Typography>
                                 <TextField

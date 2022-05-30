@@ -103,7 +103,7 @@ export default function Login() {
                             helperText={errors.Password?.message}
                             {...register("Password", {
                                 minLength: {
-                                    value: 7,
+                                    value: 8,
                                     message: "Password must contain at lest 8 characters",
                                 },
                                 maxLength: {

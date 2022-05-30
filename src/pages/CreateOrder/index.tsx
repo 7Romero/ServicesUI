@@ -122,7 +122,7 @@ export default function CreateOrder() {
                         p: "20px",
                 }}
                 >
-                    <Typography variant="h6">
+                    <Typography variant="h5">
                         Order name
                     </Typography>
                     <TextField
@@ -139,14 +139,14 @@ export default function CreateOrder() {
                                 message: "Order name must contain at lest 5 characters",
                             },
                             maxLength: {
-                                value: 20,
-                                message: "Order name must contain at most 20 characters",
+                                value: 50,
+                                message: "Order name must contain at most 50 characters",
                             },
                             required: "Order name is required",
                         })
                         }
                     />
-                    <Typography variant="h6">
+                    <Typography variant="h5">
                         Description
                     </Typography>
 
@@ -162,7 +162,7 @@ export default function CreateOrder() {
                         />
                     </Box>
 
-                    <Typography variant="h6">
+                    <Typography variant="h5">
                         Budget
                     </Typography>
                     <TextField
@@ -179,7 +179,7 @@ export default function CreateOrder() {
                                 value: /^\d/i,
                                 message: "Please enter a number"
                             },
-                            required: "Budget name is required",
+                            required: "Budget is required",
                         })
                         }
                     />
@@ -192,7 +192,7 @@ export default function CreateOrder() {
                             <Box
                                 sx={{mr: 5}}
                             >
-                                <Typography variant="h6">
+                                <Typography variant="h5">
                                     Section
                                 </Typography>
                                 <TextField
@@ -219,7 +219,7 @@ export default function CreateOrder() {
                                 </TextField>
                             </Box>
                             <Box>
-                                <Typography variant="h6">
+                                <Typography variant="h5">
                                     Category
                                 </Typography>
                                 <TextField
@@ -238,7 +238,7 @@ export default function CreateOrder() {
                                         onChange: (e) => {
                                             setSelectCategory(e.target.value);
                                         },
-                                        required: "Order name is required",
+                                        required: "Please select category",
                                     })
                                     }
                                 >

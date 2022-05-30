@@ -28,6 +28,11 @@ export default function timeCalc(data: Date): string {
         result = Math.round(difference / (1000 * 60)).toString();
         result += result === "1" ? " minute" : " minute";
     }
+    else if(difference >= 1000)
+    {
+        result = Math.round(difference / (1000 * 60)).toString();
+        result += result === "1" ? " second" : " seconds";
+    }
 
     return result;
 }

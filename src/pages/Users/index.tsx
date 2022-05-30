@@ -9,6 +9,7 @@ import UserDto from "../../entities/User/UserDto";
 import useAuth from "../../shared/hooks/useAuth";
 import BigButton from "../../components/BigButton";
 import parse from "html-react-parser";
+import Button from "@mui/material/Button";
 
 export default function Users() {
     const {enqueueSnackbar} = useSnackbar();
@@ -93,6 +94,29 @@ export default function Users() {
                     )}
                 </Container>
             </Box>
+
+            {auth.user && auth.user.username === userState?.username &&
+                <Container
+                    component="main"
+                    maxWidth="xl"
+                    sx={{
+                        mt: 2,
+                    }}
+                >
+                    <Button
+                        onClick={() => {navigate("/payment")}}
+                        variant="contained"
+                        sx={{
+                            background: "#007d70",
+                            '&:hover': {
+                                background: "#004a42",
+                            },
+                        }}
+                    >
+                        Payment
+                    </Button>
+                </Container>
+            }
 
             <Container
                 component="main"

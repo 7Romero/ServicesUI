@@ -16,7 +16,6 @@ import UserUpdateDto from "../../entities/User/UserUpdateDto";
 import {useNavigate} from "react-router-dom";
 import TextEditor from "../../components/TextEditor";
 import Avatar from "@mui/material/Avatar";
-import avatar from "../../components/User/UserInfo/avatar.png";
 
 const path = "https://localhost:7200/Resources/AvatarImg/";
 
@@ -149,7 +148,7 @@ export default function EditProfile() {
                             p: "20px",
                         }}
                     >
-                        <Typography variant="h6">
+                        <Typography variant="h5">
                             Avatar:
                         </Typography>
                         <Box
@@ -183,7 +182,7 @@ export default function EditProfile() {
                             />
                         </Box>
 
-                        <Typography variant="h6">
+                        <Typography variant="h5">
                             UserName:
                         </Typography>
                         <TextField
@@ -193,7 +192,7 @@ export default function EditProfile() {
                             value={userState.username}
                             disabled={true}
                         />
-                        <Typography variant="h6">
+                        <Typography variant="h5">
                             Firstname:
                         </Typography>
                         <TextField
@@ -204,7 +203,7 @@ export default function EditProfile() {
                             value={userState.firstName}
                             disabled={true}
                         />
-                        <Typography variant="h6">
+                        <Typography variant="h5">
                             Lastname:
                         </Typography>
                         <TextField
@@ -214,7 +213,7 @@ export default function EditProfile() {
                             value={userState.lastName}
                             disabled={true}
                         />
-                        <Typography variant="h6">
+                        <Typography variant="h5">
                             Title:
                         </Typography>
                         <TextField
@@ -239,7 +238,7 @@ export default function EditProfile() {
                             })
                             }
                         />
-                        <Typography variant="h6">
+                        <Typography variant="h5">
                             Description:
                         </Typography>
                         <Box

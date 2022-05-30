@@ -2,14 +2,24 @@ import {useCallback, useEffect, useState} from "react";
 import CheckoutForm from "../../components/Payment/CheckoutForm";
 import {Appearance, loadStripe, StripeElementsOptions } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
-import UserServices from "../../services/UserServices";
 import StripeServices from "../../services/StripeServices";
+import "./style.scss"
+import {Box, Card} from "@mui/material";
+import {useForm} from "react-hook-form";
+import OrderCreateDto from "../../entities/Order/OrderCreateDto";
+import Typography from "@mui/material/Typography";
+import * as React from "react";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 
 const stripePromise = loadStripe("pk_test_51L43XLCQoi7gKZGBXikOS0gIzK4hFZdb6pT5XbIVCWIy0x7AhtrSUC3mNFAVQZQVQpzSs7SrcaSsLlYGayOI60eF00sZoPLXlC");
 
 export default function Payment() {
 
     const [clientSecret, setClientSecret] = useState("");
+
+    const [money, setMoney] = useState<string>("");
+    const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
 
     const appearance: Appearance = {
         theme: "stripe",
@@ -19,8 +29,17 @@ export default function Payment() {
         appearance,
     };
 
-    const fetchData = useCallback(async () => {
-        const response = await StripeServices.getClientKey({id: "string"});
+    const handlerSubmit = async () => {
+        if(/\D/.test(money) && money.length != 0)
+        {
+            setErrorMessage("Enter only numbers");
+            return;
+        }
+
+        let amount: number = +money;
+        amount *= 100;
+
+        const response = await StripeServices.getClientKey({id: "string", amount: amount});
 
         if (!response.Status) {
             enqueueSnackbar(response.Message, {
@@ -31,34 +50,72 @@ export default function Payment() {
         }
 
         setClientSecret(response.Data.clientSecret)
-
-    }, []);
-
-    useEffect(() => {
-        fetchData()
-
-    }, [fetchData])
-
-    // useEffect(() => {
-    //
-    //     Create PaymentIntent as soon as the page loads
-    //     fetch("http://localhost:7200/api/stripe", {
-    //         method: "POST",
-    //         headers: { "Content-Type": "application/json" },
-    //         body: JSON.stringify({ items: [{ id: "xl-tshirt" }] }),
-    //     })
-    //         .then((res) => res.json())
-    //         .then((data) => setClientSecret(data.clientSecret));
-    // }, []);
+    }
 
     return(
-        <div>
-            {clientSecret && (
-                <Elements options={options} stripe={stripePromise}>
-                    <CheckoutForm />
-                </Elements>
+        <>
+            {clientSecret ? (
+                <Box
+                    className={"payment"}
+                    sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+
+                        height: "100%",
+                    }}
+                >
+                    <Elements options={options} stripe={stripePromise}>
+                        <CheckoutForm />
+                    </Elements>
+                </Box>
+            ) : (
+                <Box
+                    className={"payment"}
+                    sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+
+                        height: "100%",
+                    }}
+                >
+                    <Card
+                        sx={{
+                            mt: 5,
+                            p: "20px",
+                        }}
+                    >
+                        <Typography variant="h5">
+                            Balance replenishment
+                        </Typography>
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="orderName"
+                            value={money}
+                            onChange={(e) => {setMoney(e.target.value)}}
+                        />
+                        {errorMessage && (<Typography color={"red"}>{errorMessage}</Typography>)}
+                        <Button
+                            onClick={handlerSubmit}
+                            variant="contained"
+                            sx={{
+                                mt: 3,
+                                mb: 2,
+                                background: "#007d70",
+                                '&:hover': {
+                                    background: "#004a42",
+                                },
+                            }}
+                        >
+                            Next
+                        </Button>
+                    </Card>
+                </Box>
             )}
-        </div>
+        </>
     );
 }
 
